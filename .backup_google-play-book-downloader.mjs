@@ -14,39 +14,6 @@ const GOOGLE_PAGE_DOWNLOAD_PACER = 2 * 1000; // Wait between requests to reduce 
 // 5) Options object is the second argument in the call to fetch().
 const FETCH_OPTIONS = {};
 
-const My_FETCH_OPTIONS = [
-  "https://play.google.com/books/reader?id=m6weEAAAQBAJ", {
-    "headers": {
-      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-      "accept-language": "en-US,en;q=0.9",
-      "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"",
-      "sec-ch-ua-arch": "\"x86\"",
-      "sec-ch-ua-bitness": "\"64\"",
-      "sec-ch-ua-full-version": "\"114.0.5735.199\"",
-      "sec-ch-ua-full-version-list": "\"Not.A/Brand\";v=\"8.0.0.0\", \"Chromium\";v=\"114.0.5735.199\", \"Google Chrome\";v=\"114.0.5735.199\"",
-      "sec-ch-ua-mobile": "?0",
-      "sec-ch-ua-model": "\"\"",
-      "sec-ch-ua-platform": "\"Windows\"",
-      "sec-ch-ua-platform-version": "\"15.0.0\"",
-      "sec-ch-ua-wow64": "?0",
-      "sec-fetch-dest": "document",
-      "sec-fetch-mode": "navigate",
-      "sec-fetch-site": "same-origin",
-      "sec-fetch-user": "?1",
-      "upgrade-insecure-requests": "1",
-      "x-client-data": "CJC2yQEIorbJAQipncoBCIaIywEIlKHLAQj8qswBCIWgzQEI7rPNAQjatM0BCMC1zQEIpb3NAQjcvc0BCLy+zQEIpb/NAQj/v80BCNjBzQEI6MHNAQiyw80BGNOgzQEYjafNAQ==",
-      "cookie": "SID=YwgwRaZwHkQlJbXr2vQ8XfqOjsrUVuBVLaUztdnoGWKCj2_zY2xrNLfy_Z2LEmtPZBIsHA.; __Secure-1PSID=YwgwRaZwHkQlJbXr2vQ8XfqOjsrUVuBVLaUztdnoGWKCj2_zFNzdzUwriQKUb_NUAVM-aw.; __Secure-3PSID=YwgwRaZwHkQlJbXr2vQ8XfqOjsrUVuBVLaUztdnoGWKCj2_z64ZlUAQ34_97cdFx84eefA.; HSID=Aytu9g_jWt3oO96_d; SSID=AroWZUx4gCOPVb4Fm; APISID=TSVrMs1UbW7EfZkO/Alr6qhkji9_7GOT0V; SAPISID=Cz2lcDoRq4LGhn64/AI4prj0UMYWThXfSe; __Secure-1PAPISID=Cz2lcDoRq4LGhn64/AI4prj0UMYWThXfSe; __Secure-3PAPISID=Cz2lcDoRq4LGhn64/AI4prj0UMYWThXfSe; AEC=Ad49MVFCJ99HSVfAbzX0NryQBBFNZOJUF-Qjk2pFvC8O6UIKaQU_3caKxRQ; OSID=YwgwRaNVxd7guldwhabOBO4_vP55upxSLMAil3EzabhDJXSya48rBZ2FXkjWYqeDktmAig.; __Secure-OSID=YwgwRaNVxd7guldwhabOBO4_vP55upxSLMAil3EzabhDJXSyrvuxnICVXV1ELO6dGmHPRg.; OTZ=7119019_84_84__84_; NID=511=X4vfPNAxIqb2Bk5TOA4daP9EALSX7XMlmq7S_dKAY-4Y3EqaPC4LqQsPUaQUdUA6nSuy6JXK62Ief1cIdqLZDdljFChoMhnatvZO3hbjt_Jhh4XuD1z67w-lCtl2qMvbWcn8TmL9L2Nxhfs-Vqqid7vs26Fx3QB8sQcBmgTed9RLz3O1QnvygqaDb0znt99PVUHqJPTcjVKotzL8tlbF-ATm5eYKMGC3j-jTVNBtLkogg2mKciskMLujV3b9d3HrooY9U4T6hpw; 1P_JAR=2023-07-15-18; PLAY_ACTIVE_ACCOUNT=ICrt_XL61NBE_S0rhk8RpG0k65e0XwQVdDlvB6kxiQ8=authuser-0; S=billing-ui-v3=sU7_ysNkjXU29FP8lIRx96JV1u4Wfwz2:billing-ui-v3-efe=sU7_ysNkjXU29FP8lIRx96JV1u4Wfwz2; SIDCC=APoG2W_bUs8qUvNF0oV8PUzQykPAbBVvlXLcOi3dXXoRkbIlip4ibXjU-hKbB3JsWtTvO9zblMw; __Secure-1PSIDCC=APoG2W-GBZp1ZyShXPUkRg3OOEhKG_xGJA0AeU7HTBp3G-8F58Dl84kovbhqRKTcu9BJCyfkHRQ; __Secure-3PSIDCC=APoG2W-AUKmrhDOWZ4Ru_IDT6sLc2P0_t818MKinUezk27dME3HBp259Y6v6y5H1W1-Njv5cwA",
-      "Referer": "https://play.google.com/books",
-      "Referrer-Policy": "strict-origin-when-cross-origin"
-    },
-    "body": null,
-    "method": "GET"
-  }
-];
-
-const _BOOK_ID = My_FETCH_OPTIONS[0].match(/(?:\?id=)(.*)/)[1];
-const _FETCH_OPTIONS = `"headers": ` + JSON.stringify(My_FETCH_OPTIONS[1].headers);
-
 info(`Script started`);
 
 const book_dir = `books/${BOOK_ID}`;
