@@ -42,7 +42,7 @@
    ```
 
 ---
-# Template
+# Rework - Encoding Errors
    > Old
    ```js
         with open(f'{base_path}/manifest.json') as f_manifest:
@@ -52,6 +52,28 @@
    - **default value = <span style="color: orange">utf-8</span>**.
    ```js
         with open(f'{base_path}/manifest.json', encoding='utf-8') as f_manifest:
+   ```
+
+---
+# Rework - Overwriting Errors
+   > Old
+   ```js
+    fs.writeFile('pages.txt', page_files.join('\n'));
+   ```
+   > New
+   - Prevents overwriting / deleting pages, if the download is interrupted and restarted.
+   - TODO - Check for duplicate entries.
+   ```js
+    fs.appendFile('pages.txt', page_files.join('\n'));
+   ```
+
+---
+# Template
+   > Old
+   ```js
+   ```
+   > New
+   ```js
    ```
 
 ---
