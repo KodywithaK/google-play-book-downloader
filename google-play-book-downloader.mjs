@@ -2,9 +2,9 @@
 
 $.verbose = false;
 
-const BOOK_ID = 'BwCMEAAAQBAJ'; // Found in the URL of the book page. For example: BwCMEAAAQBAJ
-const GOOGLE_PAGE_DOWNLOAD_PACER = 2 * 1000; // Wait between requests to reduce risk of getting flagged for abuse.
-
+// const BOOK_ID = 'xpKkDwAAQBAJ'; // Found in the URL of the book page. For example: BwCMEAAAQBAJ
+const GOOGLE_PAGE_DOWNLOAD_PACER = 2 * 1500; // Wait between requests to reduce risk of getting flagged for abuse.
+let randomNumber = (min, max) => (Math.random() * (max - min + 1) + min);
 
 // How to get this options object:
 // 1) Go to https://play.google.com/books and login.
@@ -12,30 +12,22 @@ const GOOGLE_PAGE_DOWNLOAD_PACER = 2 * 1000; // Wait between requests to reduce 
 // 3) Click somewhere in the page.
 // 4) Right-click on the corresponding request in the dev console and then “Copy as Node.js fetch”.
 // 5) Options object is the second argument in the call to fetch().
-const FETCH_OPTIONS = {};
-
-const My_FETCH_OPTIONS = [
-  "https://play.google.com/books/reader?id=m6weEAAAQBAJ", {
+// const FETCH_OPTIONS = {
+const Nodejs_Fetch = [
+  "https://play.google.com/books/reader?id=Ck3GDwAAQBAJ", {
     "headers": {
       "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
       "accept-language": "en-US,en;q=0.9",
       "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"",
-      "sec-ch-ua-arch": "\"x86\"",
-      "sec-ch-ua-bitness": "\"64\"",
-      "sec-ch-ua-full-version": "\"114.0.5735.199\"",
-      "sec-ch-ua-full-version-list": "\"Not.A/Brand\";v=\"8.0.0.0\", \"Chromium\";v=\"114.0.5735.199\", \"Google Chrome\";v=\"114.0.5735.199\"",
       "sec-ch-ua-mobile": "?0",
-      "sec-ch-ua-model": "\"\"",
       "sec-ch-ua-platform": "\"Windows\"",
-      "sec-ch-ua-platform-version": "\"15.0.0\"",
-      "sec-ch-ua-wow64": "?0",
       "sec-fetch-dest": "document",
       "sec-fetch-mode": "navigate",
       "sec-fetch-site": "same-origin",
       "sec-fetch-user": "?1",
       "upgrade-insecure-requests": "1",
-      "x-client-data": "CJC2yQEIorbJAQipncoBCIaIywEIlKHLAQj8qswBCIWgzQEI7rPNAQjatM0BCMC1zQEIpb3NAQjcvc0BCLy+zQEIpb/NAQj/v80BCNjBzQEI6MHNAQiyw80BGNOgzQEYjafNAQ==",
-      "cookie": "SID=YwgwRaZwHkQlJbXr2vQ8XfqOjsrUVuBVLaUztdnoGWKCj2_zY2xrNLfy_Z2LEmtPZBIsHA.; __Secure-1PSID=YwgwRaZwHkQlJbXr2vQ8XfqOjsrUVuBVLaUztdnoGWKCj2_zFNzdzUwriQKUb_NUAVM-aw.; __Secure-3PSID=YwgwRaZwHkQlJbXr2vQ8XfqOjsrUVuBVLaUztdnoGWKCj2_z64ZlUAQ34_97cdFx84eefA.; HSID=Aytu9g_jWt3oO96_d; SSID=AroWZUx4gCOPVb4Fm; APISID=TSVrMs1UbW7EfZkO/Alr6qhkji9_7GOT0V; SAPISID=Cz2lcDoRq4LGhn64/AI4prj0UMYWThXfSe; __Secure-1PAPISID=Cz2lcDoRq4LGhn64/AI4prj0UMYWThXfSe; __Secure-3PAPISID=Cz2lcDoRq4LGhn64/AI4prj0UMYWThXfSe; AEC=Ad49MVFCJ99HSVfAbzX0NryQBBFNZOJUF-Qjk2pFvC8O6UIKaQU_3caKxRQ; OSID=YwgwRaNVxd7guldwhabOBO4_vP55upxSLMAil3EzabhDJXSya48rBZ2FXkjWYqeDktmAig.; __Secure-OSID=YwgwRaNVxd7guldwhabOBO4_vP55upxSLMAil3EzabhDJXSyrvuxnICVXV1ELO6dGmHPRg.; OTZ=7119019_84_84__84_; NID=511=X4vfPNAxIqb2Bk5TOA4daP9EALSX7XMlmq7S_dKAY-4Y3EqaPC4LqQsPUaQUdUA6nSuy6JXK62Ief1cIdqLZDdljFChoMhnatvZO3hbjt_Jhh4XuD1z67w-lCtl2qMvbWcn8TmL9L2Nxhfs-Vqqid7vs26Fx3QB8sQcBmgTed9RLz3O1QnvygqaDb0znt99PVUHqJPTcjVKotzL8tlbF-ATm5eYKMGC3j-jTVNBtLkogg2mKciskMLujV3b9d3HrooY9U4T6hpw; 1P_JAR=2023-07-15-18; PLAY_ACTIVE_ACCOUNT=ICrt_XL61NBE_S0rhk8RpG0k65e0XwQVdDlvB6kxiQ8=authuser-0; S=billing-ui-v3=sU7_ysNkjXU29FP8lIRx96JV1u4Wfwz2:billing-ui-v3-efe=sU7_ysNkjXU29FP8lIRx96JV1u4Wfwz2; SIDCC=APoG2W_bUs8qUvNF0oV8PUzQykPAbBVvlXLcOi3dXXoRkbIlip4ibXjU-hKbB3JsWtTvO9zblMw; __Secure-1PSIDCC=APoG2W-GBZp1ZyShXPUkRg3OOEhKG_xGJA0AeU7HTBp3G-8F58Dl84kovbhqRKTcu9BJCyfkHRQ; __Secure-3PSIDCC=APoG2W-AUKmrhDOWZ4Ru_IDT6sLc2P0_t818MKinUezk27dME3HBp259Y6v6y5H1W1-Njv5cwA",
+      "x-client-data": "CJK2yQEIo7bJAQipncoBCInnygEIkqHLAQidnM0BCIWgzQEIiKfNAQjatM0BCIy9zQEI3L3NAQi7vs0BCKS/zQEI/r/NAQjowc0BCLLDzQEI78TNARjToM0B",
+      "cookie": "SID=YwjmBXK7aqROJqpH_2hdSDnwds3NoOVXVi2QaqXN_dGOnuikGV5AU4NuDtYOC2FlTNc3GQ.; __Secure-1PSID=YwjmBXK7aqROJqpH_2hdSDnwds3NoOVXVi2QaqXN_dGOnuikgQRpUOqEkeedCgKVLaZL4w.; __Secure-3PSID=YwjmBXK7aqROJqpH_2hdSDnwds3NoOVXVi2QaqXN_dGOnuikoStX_dAo2G6YvPNGB67Tkg.; HSID=AdyAvH8p9B-DhaGBi; SSID=AMCT2j6Ahw1gGnKz9; APISID=5LFnZ24vamteUw9A/AYr_HUIdPKR88xZkJ; SAPISID=FR1OETa50vLF_LSJ/ArwCjBKMmbVLcWoPm; __Secure-1PAPISID=FR1OETa50vLF_LSJ/ArwCjBKMmbVLcWoPm; __Secure-3PAPISID=FR1OETa50vLF_LSJ/ArwCjBKMmbVLcWoPm; NID=511=pbiqTtp1k78eMpMnMBpJDAQgjmsNT5uZE21o9Rc8xOHUDmorZxv8nR_HdItbnVqjEdrBRqo6oL1SRaEHX3Wykr_iOFrEIthAO1q_L7JpvCbWKQbxKM6PoNRn1QDm5en6abLACOJ1GQAxf5e9BwWnjI1v5l6kQMHLfAtdtj40D0s; SIDCC=APoG2W_hzXFvewN3QTPwY9ZpUcQYBHkpOGSXo6Ga4XzsH3TPcxiY5hBdoN3jN887U4516Wd4; __Secure-1PSIDCC=APoG2W97RBN2ZU2epNF5Yr-TpCX-C8vQlL1GltQisY9uHmoEQTqoT79BNNCWJMpmdFKSx_XpCQ; __Secure-3PSIDCC=APoG2W9ZM1NreEnvGQcBjQnRL3JuruNEb0Qz89Zt3rCJ2nVVO57ROPgZbKqfaky7_5TCNBnDEQ; _ga_9JS7FWYMLB=GS1.1.1689658017.2.0.1689658017.0.0.0",
       "Referer": "https://play.google.com/books",
       "Referrer-Policy": "strict-origin-when-cross-origin"
     },
@@ -44,15 +36,33 @@ const My_FETCH_OPTIONS = [
   }
 ];
 
-const _BOOK_ID = My_FETCH_OPTIONS[0].match(/(?:\?id=)(.*)/)[1];
-const _FETCH_OPTIONS = `"headers": ` + JSON.stringify(My_FETCH_OPTIONS[1].headers);
+// const book_dir = `books/${BOOK_ID}`;
+
+// await $`mkdir -p ${book_dir}`;
+// await cd(book_dir);
+
+//=====// TEST AREA //=====//
+
+const BOOK_ID = Nodejs_Fetch[0].match(/(?:\?id=)(.*)/)[1];
+const BOOK_DIR = `books/${BOOK_ID}`;
+var FETCH_OPTIONS = {headers: Nodejs_Fetch[1].headers};
 
 info(`Script started`);
 
-const book_dir = `books/${BOOK_ID}`;
+//=====// Create folder, if nonexistent //=====//
 
-await $`mkdir -p ${book_dir}`;
-await cd(book_dir);
+if (!fs.existsSync(BOOK_DIR)) {
+  fs.mkdirSync(BOOK_DIR);
+  success(BOOK_DIR + ` was created`);
+await cd(BOOK_DIR);
+} else if (fs.existsSync(BOOK_DIR)) {
+  success(BOOK_DIR + ` already exists`);
+await cd(BOOK_DIR);
+} else {
+  err(e);
+}
+
+//====================================================================================================//
 
 const body = await fetch(`https://play.google.com/books/reader?id=${BOOK_ID}`, FETCH_OPTIONS).then(t => t.text());
 
@@ -106,7 +116,8 @@ const page_files = [];
 
 log(`Starting to download ${total} pages…`);
 
-for (let [i, page] of manifest.page.entries()) {
+// for (let [i, page] of manifest.page.entries()) {
+for (let [i, page] of manifest.page.splice(0).entries()) { // KwK `page.splice(x).entries()` skips x pages, `page.entries()`
   const p = `${i + 1}/${total}`;
 
   const {pid, src} = page;
@@ -121,22 +132,28 @@ for (let [i, page] of manifest.page.entries()) {
 
     const ext = mime_to_ext(mimeType);
     const filename = `${pid}.${ext}`;
-    await fs.writeFile(filename, buf);
-
-    page_files.push(filename);
+    if (!fs.existsSync(filename)) { // KwK
+      await fs.writeFile(filename, buf);
+      page_files.push(filename);
+    } else if (fs.existsSync(filename)) { // KwK
+      page_files.push(filename);
+      success(filename + ` already exists`);
+      continue;
+    } // KwK
 
     log(`[${p}] Saved to ${filename} (url: ${src})`);
   } catch (e) {
     err(`[${p}] Error! Download or decrypt failed (url: ${src}) failed with ${e.message}\n${e.stack}`);
   }
 
-  await sleep(GOOGLE_PAGE_DOWNLOAD_PACER); // Be gentle with Google Play Books
+  // await sleep(GOOGLE_PAGE_DOWNLOAD_PACER); // Be gentle with Google Play Books
+  await sleep(randomNumber(3000,8000)); // KwK Waits  anywhere from 3-10 seconds to not get flagged.
 }
 
 fs.writeFile('pages.txt', page_files.join('\n'));
 
 
-info(`Finished. The pages that got successfully downloaded can be found in "${book_dir}".`);
+info(`Finished. The pages that got successfully downloaded can be found in "${BOOK_DIR}".`);
 
 
 // ================================================
@@ -214,11 +231,13 @@ function extract_decryption_key(google_reader_body) {
   return decipher_key(atob(key_data));
 }
 
+
 function extract_toc(google_reader_body) {
   let toc_data;
   try {
     // Extract the table of contents from the embedded json object of the script in Play Book Reader's page.
     // The ToC from this page properly supports nested ToCs, whereas the book manifest only contains a flattened ToC.
+    // toc_data = google_reader_body.match(/"toc_entry":\s*(\[[^]*?\}\s*\])/)[1];
     toc_data = google_reader_body.match(/"toc_entry":\s*(\[[^]*?\}\s*\])/)[1];
   } catch (e) {
     warn(`Failed to extract the table of contents from the book's main page. Error: ${e.message}, stack:\n${e.stack}`);
@@ -289,7 +308,8 @@ function mime_to_ext(mime) {
 }
 
 function unescape_html(str) {
-  return str.replace(/&#(\d+);/g, (match, code) => {
+  // return str.replace(/&#(\d+);/g, (match, code) => {
+  return str.replace(/&#([\d\w]+);/g, (match, code) => { // KwK
     return String.fromCharCode(code);
   });
 }
