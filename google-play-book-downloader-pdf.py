@@ -11,7 +11,28 @@ import logging
 from urllib.parse import urlparse, urlencode, urlunparse, parse_qs
 from Cryptodome.Cipher import AES
 
-BOOK_ID = ""  # Found in the URL of the book page. For example: BwCMEAAAQBAJ
+########## KwK ##########
+cURL = '''
+# cURL (bash) here, e.g.:
+
+curl 'https://play.google.com/books/reader?id=BOOKID' \
+  -H 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'cookie: key1=value1; key2=value2; keyETC=valueETC' \
+  -H 'etc...: etc...' \
+'''
+BOOK_ID = re.findall(r"(?<=https:\/\/play\.google\.com\/books\/reader\?id=)(.*?)'", cURL)[0] #KwK, finds 'BOOK_ID' from 'cURL'
+
+header = re.findall(r"-H '(.*?): (.*?)'", cURL) #KwK, finds all key:value pairs from 'cURL'
+headerArray = header[:2]+header[2+1:] #KwK, removes 'cookie' from key:value pairs of 'header'
+headers = dict((k,v) for k,v in headerArray) #KwK, converts 'headerArray' the list, into 'headers' the object
+
+cookie = re.findall(r"-H '(.*?): (.*?)'", cURL)[2][1] #KwK, finds 'cookie' key:value pair from 'cURL'
+cookieArray = re.sub(r"(.*?)=(.*?); |(.*?)=(.*?)$", r"'\1':'\2',", cookie) #KwK, finds all key:value pairs from 'cookie'
+cookies = dict((k,v) for k,v in re.findall(r"'(.*?)':'(.*?)'", cookieArray)) #KwK, converts 'cookieArray' the list, into 'cookies' the object
+#########################
+
+# BOOK_ID = ""  # Found in the URL of the book page. For example: BwCMEAAAQBAJ
 GOOGLE_PAGE_DOWNLOAD_PACER = 0.5  # Wait between requests to reduce risk of getting flagged for abuse.
 
 # How to get this options object:
@@ -21,8 +42,8 @@ GOOGLE_PAGE_DOWNLOAD_PACER = 0.5  # Wait between requests to reduce risk of gett
 # 4) Right-click on the corresponding request in the dev console and then “Copy as cURL”.
 # 5) Go to https://curlconverter.com/python/ and paste your clipboard in the input box.
 # 6) From the Python code that was generated just copy the cookies and the headers to replace the two lines below:
-cookies = {}
-headers = {}
+# cookies = {}
+# headers = {}
 
 # Configure logging
 logging.basicConfig(level=logging.INFO,
@@ -83,7 +104,8 @@ def decipher_key(str_data):
 
 
 aes_key = extract_decryption_key(body)
-with open("aes_key.bin", "wb") as key_file:
+# with open("aes_key.bin", "wb") as key_file:
+with open("! aes_key.bin", "wb") as key_file: #KwK, puts this file at top of folder
     key_file.write(aes_key)
 logging.info(f"Found AES decryption key: [{aes_key.hex()}]")
 
@@ -115,7 +137,8 @@ manifest_response = requests.get(
 )
 manifest_text = manifest_response.text
 manifest = json.loads(manifest_text)
-with open("manifest.json", "w") as manifest_file:
+# with open("manifest.json", "w") as manifest_file:
+with open("! manifest.json", "w") as manifest_file: #KwK, puts this file at top of folder
     json.dump(manifest, manifest_file, indent=4)
 
 if not toc:
@@ -128,7 +151,8 @@ if not toc:
         logging.error("Error! Couldn't find the table of contents in the book manifest")
 
 if toc:
-    with open("toc.json", "w") as toc_file:
+    # with open("toc.json", "w") as toc_file:
+    with open("! toc.json", "w") as toc_file: #KwK, puts this file at top of folder
         json.dump(toc, toc_file, indent=4)
     logging.info("Extracted the table of contents to toc.json")
 
@@ -138,7 +162,8 @@ if toc:
                                                                                ".") + f" p.{t['page_index'] + 1}"
             for t in toc
         )
-        with open("toc.txt", "w") as human_toc_file:
+        # with open("toc.txt", "w") as human_toc_file:
+        with open("! toc.txt", "w") as human_toc_file: #KwK, puts this file at top of folder
             human_toc_file.write(human_toc)
         logging.info("Wrote human-readable table of contents to toc.txt")
     except Exception as e:
@@ -237,7 +262,8 @@ for i, page in enumerate(manifest["page"]):
 
     time.sleep(GOOGLE_PAGE_DOWNLOAD_PACER)  # Be gentle with Google Play Books
 
-with open("pages.txt", "w") as pages_file:
+# with open("pages.txt", "w") as pages_file:
+with open("! pages.txt", "w") as pages_file: #KwK, puts this file at top of folder
     pages_file.write("\n".join(page_files))
 
 logging.info(
